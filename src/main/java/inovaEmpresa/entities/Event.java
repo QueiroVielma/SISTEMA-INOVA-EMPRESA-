@@ -23,16 +23,19 @@ public class Event {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
-    private LocalDate juryEvaluationDates;
-    private LocalDate DatePopularEvaluation;
-    @OneToMany
+    private LocalDate juryEvaluationDate; // Corrigido
+    private LocalDate datePopularEvaluation; // Corrigido
+
+    @ManyToOne
+    @JoinColumn(name = "idea_id")  // Corrigido para ManyToOne
     private Idea idea;
+
     @ManyToMany
     @JoinTable(
-        name ="event_evaluators",
-        joinColumns = @JoinColumn (name= "evends_id"),
-        inverseJoinColumns = @JoinColumn(name = "evaluators_id")
+            name ="event_evaluators",
+            joinColumns = @JoinColumn (name= "event_id"),  // Corrigido de "evends_id"
+            inverseJoinColumns = @JoinColumn(name = "evaluator_id") // Corrigido de "evaluators_id"
     )
     @JsonManagedReference
-    private List <User> evaluators;
+    private List<User> evaluators;
 }

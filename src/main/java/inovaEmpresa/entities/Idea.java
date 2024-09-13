@@ -24,17 +24,21 @@ public class Idea {
     private Double estimatedCost;
     private String description;
     private double score;
-    private List <Long> voters;
+    private List<Long> voters;
+
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany (mappedBy = "idea")
-    private List<Event> events;
+
+    @OneToMany(mappedBy = "idea")
+    private List<Event> events;  // Correção de Event mapeado para Idea
+
     @ManyToMany
     @JoinTable(
             name = "idea_evaluators",
             joinColumns = @JoinColumn(name = "idea_id"),
-            inverseJoinColumns = @JoinColumn(name = "evaluators_id")
+            inverseJoinColumns = @JoinColumn(name = "evaluator_id")
     )
     @JsonManagedReference
-    private List <User> evaluators;
+    private List<User> evaluators;
 }

@@ -21,11 +21,13 @@ public class User {
     private String email;
     private String password;
     private int type;
-    @OneToMany (mappedBy = "user")
-    private List <Idea> ideas;
-    @ManyToMany(mappedBy = "evaluators")
-    private List <Event> evaluatorsEvents;
-    @ManyToMany(mappedBy = "evaluators")
-    private List <Idea> evaluatorsideas;
 
+    @OneToMany(mappedBy = "user")
+    private List<Idea> ideas;
+
+    @ManyToMany(mappedBy = "evaluators")
+    private List<Event> evaluatorsEvents;
+
+    @ManyToMany(mappedBy = "evaluators")
+    private List<Idea> evaluatorsIdeas;
 }
