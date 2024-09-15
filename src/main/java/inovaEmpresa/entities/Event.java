@@ -23,8 +23,8 @@ public class Event {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
-    private LocalDate juryEvaluationDate; // Corrigido
-    private LocalDate datePopularEvaluation; // Corrigido
+    private LocalDate juryEvaluationDate;
+    private LocalDate datePopularEvaluation;
 
     @ManyToOne
     @JoinColumn(name = "idea_id")  // Corrigido para ManyToOne
