@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EventPolicy {
-    public static boolean canUpdateEvent(User loggedInUser) {
+    public boolean canUpdateEvent(User loggedInUser) {
         return loggedInUser.getType() == UserType.ADMIN.getValue();
     }
 }
