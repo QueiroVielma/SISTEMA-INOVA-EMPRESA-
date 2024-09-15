@@ -27,10 +27,9 @@ public class Event {
     private LocalDate juryEvaluationDate;
     private LocalDate datePopularEvaluation;
 
-    @ManyToOne
-    @JoinColumn(name = "idea_id")  // Corrigido para ManyToOne
+    @OneToMany(mappedBy = "event")
     @JsonBackReference
-    private Idea idea;
+    private List<Idea> ideas;
 
     @ManyToMany
     @JoinTable(

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -25,16 +26,18 @@ public class Idea {
     private Double estimatedCost;
     private String description;
     private double score;
-    private List<Long> voters;
+
+    private List<Long> voters=new ArrayList<>();;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
 
-    @OneToMany(mappedBy = "idea")
+    @ManyToOne()
+    @JoinColumn(name = "idea_id")
     @JsonManagedReference
-    private List<Event> events;  // Correção de Event mapeado para Idea
+    private Event event;
 
     @ManyToMany
     @JoinTable(

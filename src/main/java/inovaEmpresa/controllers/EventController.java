@@ -1,6 +1,7 @@
 package inovaEmpresa.controllers;
 
 import inovaEmpresa.dto.event.AssignEvaluators;
+import inovaEmpresa.dto.event.AssignIdeas;
 import inovaEmpresa.dto.event.CreateEvent;
 import inovaEmpresa.entities.Event;
 import inovaEmpresa.services.EventService;
@@ -34,5 +35,17 @@ public class EventController {
     public ResponseEntity<Void> assign(@RequestBody AssignEvaluators data) {
         eventService.assignEvents(data);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/evaluator")
+    public ResponseEntity<String> ditributionIdeas(@RequestBody AssignIdeas data) {
+        eventService.ditributionIdeas(data);
+        return ResponseEntity.ok("Ideias distribuídas com sucesso entre os jurados.");
+    }
+
+    @PutMapping("/voters/{idIdea}/{idUser}")
+    public ResponseEntity<String> voters(@RequestBody AssignIdeas data) {
+        eventService.ditributionIdeas(data);
+        return ResponseEntity.ok("Ideias distribuídas com sucesso entre os jurados.");
     }
 }

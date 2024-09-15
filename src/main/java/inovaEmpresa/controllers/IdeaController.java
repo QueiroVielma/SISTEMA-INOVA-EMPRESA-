@@ -1,6 +1,7 @@
 package inovaEmpresa.controllers;
 
 
+import inovaEmpresa.dto.idea.AddScore;
 import inovaEmpresa.dto.idea.CreateIdea;
 import inovaEmpresa.entities.Idea;
 import inovaEmpresa.services.IdeaService;
@@ -27,5 +28,11 @@ public class IdeaController {
     public ResponseEntity<List<Idea>> bestIdeas() {
         List<Idea> topIdeas = ideaService.getTop10Ideas();
         return ResponseEntity.ok(topIdeas);
+    }
+
+    @PutMapping("/average")
+    public ResponseEntity<Double> endorseIdea(AddScore data){
+        Double score=  ideaService.endorseIdea(data);
+        return ResponseEntity.ok(score);
     }
 }
