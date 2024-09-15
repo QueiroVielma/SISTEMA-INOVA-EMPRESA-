@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserPolicy {
     public static boolean canUpdateUser(User loggedInUser) {
-        System.out.println(loggedInUser.getType());
         return loggedInUser.getType() == UserType.ADMIN.getValue();
     }
 }
