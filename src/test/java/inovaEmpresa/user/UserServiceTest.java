@@ -1,5 +1,6 @@
 package inovaEmpresa.user;
 
+import inovaEmpresa.dto.user.UpdateUserType;
 import inovaEmpresa.dto.user.UserDTO;
 import inovaEmpresa.entities.User;
 import inovaEmpresa.enums.UserType;
@@ -11,7 +12,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -28,7 +34,7 @@ public class UserServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
-    public void testRegisterCollaborator() {
+    void testRegisterCollaborator() {
 
         MockitoAnnotations.openMocks(this);
 
@@ -51,5 +57,34 @@ public class UserServiceTest {
         assertEquals("John Doe", result.getName());
         assertEquals("john.doe@example.com", result.getEmail());
         assertEquals(UserType.COLLABORATOR.getValue(), result.getType());
+    }
+
+    @Test
+    void testUpdateUserStatus() {
+        User userLogged = new User();
+        userLogged.setId(1L);
+        userLogged.setType(UserType.ADMIN.getValue());
+
+        User user = new User();
+        user.setId(2L);
+
+        UpdateUserType updateUserDTO = new UpdateUserType();
+        updateUserDTO.setUserId(1L);
+        updateUserDTO.setUserType(UserType.ADMIN);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(userLogged));
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user));
+        when(userRepository.save(user)).thenReturn(user);
+        User updatedUser = userService.updateUserStatus(2L, updateUserDTO);
+        assertEquals(UserType.ADMIN.getValue(), updatedUser.getType());
+    }
+
+    @Test
+    void testUpdateUserStatus_NotFound() {
+        UpdateUserType updateUserDTO = new UpdateUserType();
+        updateUserDTO.setUserId(1L);
+
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+        assertThrows(ResponseStatusException.class, () -> userService.updateUserStatus(2L, updateUserDTO));
     }
 }
