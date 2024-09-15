@@ -1,5 +1,6 @@
 package inovaEmpresa.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,9 +29,11 @@ public class Idea {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @OneToMany(mappedBy = "idea")
+    @JsonManagedReference
     private List<Event> events;  // Correção de Event mapeado para Idea
 
     @ManyToMany
