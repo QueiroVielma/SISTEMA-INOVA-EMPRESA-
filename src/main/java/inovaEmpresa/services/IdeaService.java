@@ -43,7 +43,6 @@ public class IdeaService {
         return ideaRepository.save(idea);
     }
 
-
     public List<Idea> getTop10Ideas() {
         List<Idea> topIdeas = ideaRepository.findTop10Ideas();
         if (topIdeas.size() > 10) {

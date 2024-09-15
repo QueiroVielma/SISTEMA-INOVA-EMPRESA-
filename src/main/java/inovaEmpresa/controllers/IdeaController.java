@@ -24,6 +24,7 @@ public class IdeaController {
         Idea createdIdea = ideaService.store(data);
         return ResponseEntity.ok(createdIdea);
     }
+    
     @GetMapping("/best-ideas")
     public ResponseEntity<List<Idea>> bestIdeas() {
         List<Idea> topIdeas = ideaService.getTop10Ideas();

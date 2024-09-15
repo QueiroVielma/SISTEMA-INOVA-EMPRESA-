@@ -29,11 +29,13 @@ public class EventService {
     @Autowired
     private IdeaRepository ideaRepository;
 
+    @Autowired
+    private EventPolicy eventPolicy;
     public Event store(CreateEvent createEvent) {
         User userLogged = userRepository.findById(createEvent.getUserId()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Logged user not found"));
         System.out.println(userLogged.getType());
-        if(EventPolicy.canUpdateEvent(userLogged)){
+        if(eventPolicy.canUpdateEvent(userLogged)){
             Event event = new Event();
             event.setName(createEvent.getName());
             event.setDescription(createEvent.getDescription());
