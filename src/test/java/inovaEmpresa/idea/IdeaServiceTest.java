@@ -1,6 +1,7 @@
 package inovaEmpresa.idea;
 
 import inovaEmpresa.builder.IdeaBuilder;
+import inovaEmpresa.dto.idea.AddScore;
 import inovaEmpresa.dto.idea.CreateIdea;
 import inovaEmpresa.entities.Idea;
 import inovaEmpresa.entities.User;
@@ -122,6 +123,75 @@ public class IdeaServiceTest {
         assertThrows(EntityNotFoundException.class, () -> {
             ideaService.store(data);
         });
+    }
+
+    @Test
+    public void testEndorseIdeaSuccess() {
+        AddScore addScore = new AddScore(1L, 7.0, 8.0);
+        Idea idea = new Idea();
+        idea.setId(1L);
+
+        when(ideaRepository.findById(1L)).thenReturn(Optional.of(idea));
+
+        double score = ideaService.endorseIdea(addScore);
+
+        assertEquals(7.5, score);
+        verify(ideaRepository).save(idea);
+    }
+
+    @Test
+    public void testEndorseIdeaInvalidScore() {
+        AddScore addScore = new AddScore(1L, 2.0, 12.0);
+
+        Idea idea = new Idea();
+        idea.setId(1L);
+
+        when(ideaRepository.findById(1L)).thenReturn(Optional.of(idea));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            ideaService.endorseIdea(addScore);
+        });
+
+        assertEquals("A nota deve estar entre 3 e 10.", exception.getMessage());
+    }
+
+    @Test
+    public void testVoteSuccess() {
+        Idea idea = new Idea();
+        idea.setId(1L);
+        idea.getVoters().add(1L);
+
+        when(ideaRepository.findById(1L)).thenReturn(Optional.of(idea));
+
+        ideaService.popularRating(1L, 2L);
+
+        verify(ideaRepository).save(idea);
+    }
+
+    @Test
+    public void testPopularRatingSuccess() {
+        Idea idea = new Idea();
+        idea.setId(1L);
+
+        when(ideaRepository.findById(1L)).thenReturn(Optional.of(idea));
+
+        ideaService.popularRating(1L, 2L);
+
+        verify(ideaRepository).save(idea);
+        assertTrue(idea.getVoters().contains(2L));
+    }
+
+    @Test
+    public void testPopularRatingUserAlreadyVoted() {
+        Idea idea = new Idea();
+        idea.setId(1L);
+        idea.getVoters().add(2L);
+
+        when(ideaRepository.findById(1L)).thenReturn(Optional.of(idea));
+
+        ideaService.popularRating(1L, 2L);
+
+        verify(ideaRepository, never()).save(idea);
     }
 
 }

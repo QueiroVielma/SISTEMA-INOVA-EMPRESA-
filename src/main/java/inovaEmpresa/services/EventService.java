@@ -1,19 +1,25 @@
 package inovaEmpresa.services;
 
 import inovaEmpresa.dto.event.AssignEvaluators;
+import inovaEmpresa.dto.event.AssignIdeas;
 import inovaEmpresa.dto.event.CreateEvent;
 import inovaEmpresa.entities.Event;
+import inovaEmpresa.entities.Idea;
 import inovaEmpresa.entities.User;
 import inovaEmpresa.policies.EventPolicy;
 import inovaEmpresa.repositories.EventRepository;
 
+import inovaEmpresa.repositories.IdeaRepository;
 import inovaEmpresa.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EventService {
@@ -21,6 +27,8 @@ public class EventService {
     private EventRepository eventRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private IdeaRepository ideaRepository;
 
     @Autowired
     private EventPolicy eventPolicy;
@@ -54,5 +62,31 @@ public class EventService {
 
         event.setEvaluators(evaluators);
         eventRepository.save(event);
+    }
+
+    public void ditributionIdeas(AssignIdeas data) {
+        Event event = eventRepository.findById(data.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Event not found"));
+        List<Idea> ideas = event.getIdeas();
+        List<User> evaluators = event.getEvaluators();
+        Collections.shuffle(ideas);
+        int index = 0;
+        for (Idea idea : ideas) {
+            User jurado1 = evaluators.get(index % evaluators.size());
+            User jurado2 = evaluators.get((index + 1) % evaluators.size());
+
+            if (jurado1.getIdeas() == null) {
+                jurado1.setIdeas(new ArrayList<>());
+            }
+            if (jurado2.getIdeas() == null) {
+                jurado2.setIdeas(new ArrayList<>());
+            }
+
+            jurado1.getIdeas().add(idea);
+            jurado2.getIdeas().add(idea);
+            userRepository.save(jurado1);
+            userRepository.save(jurado2);
+              index++;
+        }
     }
 }

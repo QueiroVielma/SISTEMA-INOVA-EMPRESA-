@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,7 +24,7 @@ public class User {
     private int type;
 
     @OneToMany(mappedBy = "user")
-    private List<Idea> ideas;
+    private List<Idea> ideas = new ArrayList<>();
 
     @ManyToMany(mappedBy = "evaluators")
     private List<Event> evaluatorsEvents;
