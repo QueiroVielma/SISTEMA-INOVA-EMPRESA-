@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -66,20 +67,26 @@ public class EventService {
     public void ditributionIdeas(AssignIdeas data) {
         Event event = eventRepository.findById(data.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Event not found"));
-        List<Idea> ideas= event.getIdeas();
-        List <User> evaluators= event.getEvaluators();
+        List<Idea> ideas = event.getIdeas();
+        List<User> evaluators = event.getEvaluators();
         Collections.shuffle(ideas);
         int index = 0;
         for (Idea idea : ideas) {
             User jurado1 = evaluators.get(index % evaluators.size());
             User jurado2 = evaluators.get((index + 1) % evaluators.size());
 
+            if (jurado1.getIdeas() == null) {
+                jurado1.setIdeas(new ArrayList<>());
+            }
+            if (jurado2.getIdeas() == null) {
+                jurado2.setIdeas(new ArrayList<>());
+            }
+
             jurado1.getIdeas().add(idea);
             jurado2.getIdeas().add(idea);
             userRepository.save(jurado1);
             userRepository.save(jurado2);
-            index++;
-
+              index++;
         }
     }
 }

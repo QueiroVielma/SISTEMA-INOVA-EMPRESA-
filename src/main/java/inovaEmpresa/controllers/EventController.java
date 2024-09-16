@@ -42,10 +42,4 @@ public class EventController {
         eventService.ditributionIdeas(data);
         return ResponseEntity.ok("Ideias distribuídas com sucesso entre os jurados.");
     }
-
-    @PutMapping("/voters/{idIdea}/{idUser}")
-    public ResponseEntity<String> voters(@RequestBody AssignIdeas data) {
-        eventService.ditributionIdeas(data);
-        return ResponseEntity.ok("Ideias distribuídas com sucesso entre os jurados.");
-    }
 }

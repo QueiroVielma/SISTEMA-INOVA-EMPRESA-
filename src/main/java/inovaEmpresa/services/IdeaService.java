@@ -64,10 +64,10 @@ public class IdeaService {
         return score;
     }
 
-    public void popularRating (Long idIdea, Long userId ){
-        Idea idea= ideaRepository.findById(idIdea).get();
-        boolean validation =idea.getVoters().contains(userId);
-        if (validation){
+    public void popularRating(Long idIdea, Long userId) {
+        Idea idea = ideaRepository.findById(idIdea).orElseThrow(() -> new RuntimeException("Idea not found"));
+
+        if (!idea.getVoters().contains(userId)) {
             idea.getVoters().add(userId);
             ideaRepository.save(idea);
         }

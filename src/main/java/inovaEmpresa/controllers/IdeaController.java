@@ -36,4 +36,10 @@ public class IdeaController {
         Double score=  ideaService.endorseIdea(data);
         return ResponseEntity.ok(score);
     }
+
+    @PutMapping("/voters/{idIdea}/{idUser}")
+    public ResponseEntity<String> vote(@PathVariable Long idIdea, @PathVariable Long idUser ) {
+        ideaService.popularRating(idIdea, idUser);
+        return ResponseEntity.ok("Vote made successfully");
+    }
 }

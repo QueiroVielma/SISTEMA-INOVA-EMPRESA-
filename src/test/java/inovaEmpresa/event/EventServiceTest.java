@@ -1,8 +1,10 @@
 package inovaEmpresa.event;
 
 import inovaEmpresa.dto.event.AssignEvaluators;
+import inovaEmpresa.dto.event.AssignIdeas;
 import inovaEmpresa.dto.event.CreateEvent;
 import inovaEmpresa.entities.Event;
+import inovaEmpresa.entities.Idea;
 import inovaEmpresa.entities.User;
 import inovaEmpresa.enums.UserType;
 import inovaEmpresa.policies.EventPolicy;
@@ -19,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -171,5 +174,40 @@ public class EventServiceTest {
         );
 
         assertEquals("One or more evaluators not found", exception.getMessage());
+    }
+
+    @Test
+    public void testDitributionIdeas() {
+        // Dados de teste
+        User user1 = new User();
+        user1.setId(1L);
+        user1.setIdeas(new ArrayList<>());
+
+        User user2 = new User();
+        user2.setId(2L);
+        user2.setIdeas(new ArrayList<>());
+
+        Idea idea1 = new Idea();
+        Idea idea2 = new Idea();
+        Idea idea3 = new Idea();
+        List<Idea> ideas = Arrays.asList(idea1, idea2, idea3);
+
+        Event event = new Event();
+        event.setId(1L);
+        event.setIdeas(ideas);
+        event.setEvaluators(Arrays.asList(user1, user2));
+
+        AssignIdeas data = new AssignIdeas();
+        data.setId(1L);
+
+        // Configuração do mock
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+
+        // Chamada do método a ser testado
+        eventService.ditributionIdeas(data);
+
+        // Verificação
+        verify(userRepository, times(3)).save(user1);
+        verify(userRepository, times(3)).save(user2);
     }
 }
