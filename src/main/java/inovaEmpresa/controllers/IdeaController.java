@@ -20,9 +20,9 @@ public class IdeaController {
     private IdeaService ideaService;
 
     @PostMapping
-    public ResponseEntity<Idea> createIdea(@Valid @RequestBody CreateIdea data) {
+    public ResponseEntity<String> createIdea(@Valid @RequestBody CreateIdea data) {
         Idea createdIdea = ideaService.store(data);
-        return ResponseEntity.ok(createdIdea);
+        return ResponseEntity.ok("idea created successfully");
     }
     
     @GetMapping("/best-ideas")

@@ -1,5 +1,6 @@
 package inovaEmpresa.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.List;
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String email;
@@ -24,6 +25,7 @@ public class User {
     private int type;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Idea> ideas = new ArrayList<>();
 
     @ManyToMany(mappedBy = "evaluators")

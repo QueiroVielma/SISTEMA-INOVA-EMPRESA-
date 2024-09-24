@@ -3,8 +3,10 @@ package inovaEmpresa.services;
 import inovaEmpresa.dto.event.AssignIdeas;
 import inovaEmpresa.dto.idea.AddScore;
 import inovaEmpresa.dto.idea.CreateIdea;
+import inovaEmpresa.entities.Event;
 import inovaEmpresa.entities.Idea;
 import inovaEmpresa.entities.User;
+import inovaEmpresa.repositories.EventRepository;
 import inovaEmpresa.repositories.IdeaRepository;
 import inovaEmpresa.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,9 +24,15 @@ public class IdeaService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    EventRepository eventRepository;
+
     public Idea store(CreateIdea data) {
         User user = userRepository.findById(data.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id " + data.getUserId()));
+
+        Event event = eventRepository.findById(data.getEventId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id " + data.getEventId()));
 
         if (ideaRepository.findByUserId(user.getId()).isPresent()) {
             throw new IllegalStateException("User has already posted an idea");
@@ -34,6 +42,7 @@ public class IdeaService {
         idea.setImpact(data.getImpact());
         idea.setEstimatedCost(data.getEstimatedCost());
         idea.setDescription(data.getDescription());
+        idea.setEvent(event);
         if (data.getScore() != null) {
             idea.setScore(data.getScore());
         } else {

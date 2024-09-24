@@ -6,6 +6,7 @@ import inovaEmpresa.dto.event.CreateEvent;
 import inovaEmpresa.entities.Event;
 import inovaEmpresa.entities.Idea;
 import inovaEmpresa.entities.User;
+import inovaEmpresa.enums.UserType;
 import inovaEmpresa.policies.EventPolicy;
 import inovaEmpresa.repositories.EventRepository;
 
@@ -58,6 +59,14 @@ public class EventService {
         List<User> evaluators = userRepository.findAllById(data.getEvaluatorsId());
         if (evaluators.size() != data.getEvaluatorsId().size()) {
             throw new IllegalArgumentException("One or more evaluators not found");
+        }
+
+        for (User evaluator : evaluators) {
+                if (evaluator.getType() == UserType.EVALUATOR.getValue()) {
+                    event.getEvaluators().add(evaluator);
+                } else {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with ID " + evaluator.getId() + " is not an evaluator");
+                }
         }
 
         event.setEvaluators(evaluators);

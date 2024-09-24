@@ -13,6 +13,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/events")
 public class EventController {
@@ -37,9 +39,19 @@ public class EventController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/evaluator")
+    @PutMapping("/assing/idea")
     public ResponseEntity<String> ditributionIdeas(@RequestBody AssignIdeas data) {
         eventService.ditributionIdeas(data);
         return ResponseEntity.ok("Ideias distribuídas com sucesso entre os jurados.");
     }
+
+//    @PutMapping("/{eventId}/evaluators")
+//    public ResponseEntity<String> addEvaluatorsToEvent(@PathVariable Long eventId, @RequestBody List<Long> evaluatorsIds) {
+//        try {
+//            eventService.addEvaluatorsToEvent(eventId, evaluatorsIds);
+//            return ResponseEntity.status(HttpStatus.OK).body("Evaluators added successfully");
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//        }
+//    }
 }

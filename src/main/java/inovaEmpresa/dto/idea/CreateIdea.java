@@ -16,6 +16,8 @@ import lombok.Setter;
 public class CreateIdea {
     private Long userId;
 
+    private Long eventId;
+
     @NotBlank(message = "Name is required")
     private String name;
 
